@@ -1,0 +1,15 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.admin {
+  background-color: #ffe4e1;
+}
+
+.cliente {
+  background-color: #e0ffff;
+}
+
+.visitante {
+  background-color: #f0f0f0;
+}
