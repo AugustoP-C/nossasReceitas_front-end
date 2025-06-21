@@ -50,7 +50,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const data = await res.json();
     if (res.ok) {
       alert('Login realizado com sucesso!');
-      // window.location.href = '/dashboard.html';
+      window.location.href = '../home/home.html';
     } else {
       document.getElementById('erro-msg').textContent = data.mensagem || 'Erro ao fazer login.';
     }
