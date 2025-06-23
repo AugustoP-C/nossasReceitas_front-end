@@ -30,10 +30,11 @@ async function obterPerfilUsuario() {
   return cargo;
 }
 
-function carregarHomePorPerfil(perfil) {
+async function carregarHomePorPerfil() {
   const conteudo = document.getElementById("conteudo");
   const body = document.body;
 
+  let perfil = await obterPerfilUsuario;
   // Aplica uma classe de estilo de acordo com o perfil
   body.classList.add(perfil);
 
@@ -73,16 +74,16 @@ function carregarHomePorPerfil(perfil) {
             <div class="dashboard-box">
               <h2>Dashboard Cozinheiro</h2>
               <div class="dashboard-buttons">
-                <button onclick="location.href='adicionar.html'">
+                <button onclick="location.href='../addReceitas/addReceitas.html'">
                   <span class="icon">📋</span> Adicionar receita
                 </button>
-                <button onclick="location.href='ver.html'">
+                <button onclick="location.href='../verReceitas/verReceitas.html'">
                   <span class="icon">📋</span> Ver receita
                 </button>
-                <button onclick="location.href='medida.html'">
+                <button onclick="location.href='../medidas/medidas.html'">
                   <span class="icon">📏</span> Medida
                 </button>
-                <button onclick="location.href='ingredientes.html'">
+                <button onclick="location.href='../ingredientes/ingredientes.html'">
                   <span class="icon">🧂</span> Ingredientes
                 </button>
               </div>
