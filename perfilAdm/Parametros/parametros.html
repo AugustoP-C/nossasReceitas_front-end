@@ -1,0 +1,246 @@
+<!-- Parametros.html (adaptado para JS e API) -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inserir Parâmetro</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+        height: 100%;
+      }
+
+      header {
+        background-color: #ffd700;
+        color: #b22222;
+        padding: 20px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.8rem;
+      }
+
+      .container {
+        background-color: white;
+        height: calc(100% - 80px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+      }
+
+      .box {
+        background-color: #f5f0c9;
+        padding: 2rem;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      h2 {
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+
+      .form-group {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 1rem;
+      }
+
+      .form-group > div {
+        flex: 1;
+        min-width: 130px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      input[type="date"],
+      select {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .btn {
+        padding: 0.7rem;
+        border: none;
+        border-radius: 6px;
+        background-color: #1877f2;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .btn:hover {
+        background-color: #1056a3;
+      }
+
+      .btn-secondary {
+        background-color: #3b82f6;
+        margin-top: 0.5rem;
+      }
+
+      .voltar {
+        margin-top: 2rem;
+        font-size: 1rem;
+        cursor: pointer;
+        color: black;
+        text-decoration: underline;
+      }
+
+      .voltar:hover {
+        color: #444;
+      }
+
+      .mensagem {
+        margin-top: 1rem;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Nossas Receitas</header>
+
+    <div class="container">
+      <div class="box">
+        <h2>Inserir Parâmetro</h2>
+
+        <div class="form-group">
+          <div class="radio-group">
+            <label>Tipo de relatório</label>
+            <label
+              ><input
+                type="radio"
+                name="tipo-relatorio"
+                value="mensal"
+                checked
+              />
+              Produção Mensal</label
+            >
+            <label
+              ><input type="radio" name="tipo-relatorio" value="semanal" />
+              Produção Semanal</label
+            >
+          </div>
+
+          <div>
+            <label for="quantidade">Quantidade</label>
+            <select id="quantidade">
+              <option value="">Selecione</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="data-producao">Data Produção</label>
+            <input type="date" id="data-producao" />
+          </div>
+        </div>
+
+        <button class="btn" onclick="gerarRelatorio()">
+          Avançar/Gerar Relatório
+        </button>
+        <button class="btn btn-secondary" onclick="limparFormulario()">
+          Limpar
+        </button>
+
+        <div id="mensagem" class="mensagem"></div>
+      </div>
+
+      <div class="voltar" onclick="window.history.back()">Voltar</div>
+    </div>
+
+    <script>
+      async function gerarRelatorio() {
+        const tipo = document.querySelector(
+          'input[name="tipo-relatorio"]:checked'
+        ).value;
+        const quantidade = document.getElementById("quantidade").value;
+        const data = document.getElementById("data-producao").value;
+        const mensagem = document.getElementById("mensagem");
+
+        if (!quantidade || !data) {
+          mensagem.textContent = "Preencha todos os campos!";
+          mensagem.style.color = "red";
+          return;
+        }
+
+        const dados = {
+          tipoRelatorio: tipo,
+          quantidade: parseInt(quantidade),
+          dataProducao: data,
+        };
+
+        try {
+          mensagem.textContent = "Enviando...";
+          mensagem.style.color = "#000";
+
+          const resposta = await fetch("http://localhost:3000/api/parametros", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dados),
+          });
+
+          if (resposta.ok) {
+            mensagem.textContent = "Relatório gerado com sucesso!";
+            mensagem.style.color = "green";
+          } else {
+            const erro = await resposta.json();
+            mensagem.textContent = erro.message || "Erro ao gerar relatório.";
+            mensagem.style.color = "red";
+          }
+        } catch (err) {
+          mensagem.textContent = "Erro de conexão com o servidor.";
+          mensagem.style.color = "red";
+        }
+      }
+
+      function limparFormulario() {
+        document.querySelector(
+          'input[name="tipo-relatorio"][value="mensal"]'
+        ).checked = true;
+        document.getElementById("quantidade").value = "";
+        document.getElementById("data-producao").value = "";
+        document.getElementById("mensagem").textContent = "";
+      }
+    </script>
+  </body>
+</html>
+<!-- Back deve receber:
+{
+  "tipoRelatorio": "mensal",
+  "quantidade": 25,
+  "dataProducao": "2025-06-22"
+}
+
+ -->

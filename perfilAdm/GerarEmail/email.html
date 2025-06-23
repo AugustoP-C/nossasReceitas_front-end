@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nossas Receitas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .font-fredoka {
+        font-family: "Fredoka One", cursive;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <header class="bg-yellow-400 py-3 text-center">
+      <h1 class="font-fredoka text-[A73838] text-lg leading-none">
+        Nossas Receitas
+      </h1>
+    </header>
+
+    <main class="p-4">
+      <section class="bg-yellow-100 rounded-xl p-6 max-w-4xl mx-auto">
+        <h2 class="text-center font-semibold text-lg mb-4">
+          Gerar e-mail de Produção Mensal
+        </h2>
+        <div class="overflow-x-auto">
+          <table
+            class="w-full border border-gray-300 border-collapse rounded-lg"
+          >
+            <thead>
+              <tr class="bg-white">
+                <th
+                  class="border border-gray-300 px-3 py-1 text-left text-sm font-normal"
+                >
+                  Cozinheiro
+                </th>
+                <th
+                  class="border border-gray-300 px-3 py-1 text-center text-sm font-normal"
+                >
+                  Receitas prontas
+                </th>
+                <th
+                  class="border border-gray-300 px-3 py-1 text-center text-sm font-normal"
+                >
+                  Receitas a Fazer
+                </th>
+                <th
+                  class="border border-gray-300 px-3 py-1 text-center text-sm font-normal"
+                >
+                  Meta
+                </th>
+                <th
+                  class="border border-gray-300 px-3 py-1 text-center text-sm font-normal"
+                >
+                  Editor
+                </th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela">
+              <tr>
+                <td colspan="5" class="text-center p-2 text-gray-500">
+                  Carregando...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-6 text-center">
+          <button
+            class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm flex items-center justify-center mx-auto"
+            type="button"
+          >
+            Enviar para os selecionados&nbsp;<i class="fas fa-envelope"></i>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="p-4 text-right text-lg font-normal cursor-pointer"
+      onclick="window.history.back()"
+    >
+      Voltar
+    </footer>
+
+    <script>
+      async function carregarTabela() {
+        const tabela = document.getElementById("corpo-tabela");
+        tabela.innerHTML =
+          '<tr><td colspan="5" class="text-center p-2 text-gray-500">Carregando...</td></tr>';
+
+        try {
+          const resposta = await fetch("http://localhost:3000/api/cozinheiros"); // Altere essa URL para a real
+          if (!resposta.ok) throw new Error("Erro na requisição");
+
+          const dados = await resposta.json();
+          if (!Array.isArray(dados) || dados.length === 0) {
+            tabela.innerHTML =
+              '<tr><td colspan="5" class="text-center p-2 text-gray-500">Nenhum dado encontrado</td></tr>';
+            return;
+          }
+
+          tabela.innerHTML = "";
+
+          dados.forEach((item) => {
+            const tr = document.createElement("tr");
+            tr.className = "bg-white";
+
+            tr.innerHTML = `
+            <td class="border border-gray-300 px-3 py-1 text-sm">${
+              item.nome
+            }</td>
+            <td class="border border-gray-300 px-3 py-1 text-center text-sm">${
+              item.prontas
+            }</td>
+            <td class="border border-gray-300 px-3 py-1 text-center text-sm">${
+              item.afazer
+            }</td>
+            <td class="border border-gray-300 px-3 py-1 text-center text-sm">${
+              item.meta
+            }</td>
+            <td class="border border-gray-300 px-3 py-1 text-center text-sm space-x-1">
+              <i class="fas fa-pencil-alt cursor-pointer"></i>
+              <i class="fas fa-info-circle cursor-pointer"></i>
+              <i class="fas fa-trash cursor-pointer"></i>
+              ${
+                item.checkbox !== false
+                  ? `<input type="checkbox" ${
+                      item.checkbox ? "checked" : ""
+                    } class="inline-block align-middle" />`
+                  : `<i class="far fa-square"></i>`
+              }
+            </td>
+          `;
+
+            tabela.appendChild(tr);
+          });
+        } catch (err) {
+          tabela.innerHTML = `<tr><td colspan="5" class="text-center text-red-500 p-2">Erro ao carregar dados: ${err.message}</td></tr>`;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", carregarTabela);
+    </script>
+  </body>
+</html>
+
+<!-- Back end deve retornar: 
+ [
+  {
+    "nome": "Arthur",
+    "prontas": 8,
+    "afazer": 12,
+    "meta": "✓",
+    "checkbox": false
+  },
+  {
+    "nome": "Beyoncé",
+    "prontas": 7,
+    "afazer": 14,
+    "meta": "<i class='fas fa-sync-alt'></i>",
+    "checkbox": true
+  }
+]
+ -->

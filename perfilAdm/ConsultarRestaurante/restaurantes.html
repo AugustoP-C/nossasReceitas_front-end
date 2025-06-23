@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nossas Receitas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      table {
+        border-collapse: separate;
+        border-spacing: 0 0.25rem;
+      }
+    </style>
+  </head>
+  <body class="bg-white font-sans">
+    <header class="bg-yellow-400 py-3 text-center">
+      <h1 class="text-lg font-extrabold text-red-800">Nossas Receitas</h1>
+    </header>
+
+    <main class="p-6">
+      <section
+        class="bg-yellow-100 rounded-xl max-w-4xl mx-auto p-6"
+        aria-label="Tabela Restaurante"
+      >
+        <h2 class="text-center font-semibold text-lg mb-4">
+          Tabela Restaurante
+        </h2>
+        <table
+          class="w-full text-center text-xs sm:text-sm border border-gray-300 rounded-md overflow-hidden"
+        >
+          <thead>
+            <tr class="bg-white">
+              <th class="border border-gray-300 py-1 px-2 font-normal">
+                Nota Do Restaurante
+              </th>
+              <th class="border border-gray-300 py-1 px-2 font-normal">
+                Nome Restaurante
+              </th>
+              <th class="border border-gray-300 py-1 px-2 font-normal">
+                Editar
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tabela-restaurantes">
+            <tr>
+              <td colspan="3" class="text-center p-2 text-gray-500">
+                Carregando...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer
+      class="p-6 text-right text-lg font-normal text-black max-w-4xl mx-auto cursor-pointer"
+      onclick="window.history.back()"
+    >
+      Voltar
+    </footer>
+
+    <script>
+      async function carregarRestaurantes() {
+        const tabela = document.getElementById("tabela-restaurantes");
+        tabela.innerHTML =
+          '<tr><td colspan="3" class="text-center p-2 text-gray-500">Carregando...</td></tr>';
+
+        try {
+          const resposta = await fetch(
+            "http://localhost:3000/api/restaurantes"
+          ); // <-- Altere a URL conforme necessário
+          if (!resposta.ok) throw new Error("Erro ao buscar dados");
+
+          const dados = await resposta.json();
+
+          if (!Array.isArray(dados) || dados.length === 0) {
+            tabela.innerHTML =
+              '<tr><td colspan="3" class="text-center p-2 text-gray-500">Nenhum restaurante encontrado</td></tr>';
+            return;
+          }
+
+          tabela.innerHTML = "";
+          dados.forEach((rest) => {
+            const row = document.createElement("tr");
+            row.className = "bg-white";
+            row.innerHTML = `
+            <td class="border border-gray-300 py-1 px-2 text-left">
+              <span class="text-yellow-400 text-[10px] sm:text-xs">
+                ${gerarEstrelas(rest.nota)}
+              </span>
+            </td>
+            <td class="border border-gray-300 py-1 px-2">${rest.nome}</td>
+            <td class="border border-gray-300 py-1 px-2 space-x-2 text-gray-600 text-xs sm:text-sm">
+              <i class="fas fa-pencil-alt cursor-pointer" title="Editar"></i>
+              <i class="fas fa-info-circle cursor-pointer" title="Detalhes"></i>
+              <i class="fas fa-trash-alt cursor-pointer" title="Excluir"></i>
+            </td>
+          `;
+            tabela.appendChild(row);
+          });
+        } catch (error) {
+          tabela.innerHTML = `<tr><td colspan="3" class="text-center text-red-500 p-2">Erro ao carregar dados: ${error.message}</td></tr>`;
+        }
+      }
+
+      function gerarEstrelas(nota) {
+        let estrelas = "";
+        for (let i = 1; i <= 5; i++) {
+          estrelas += `<i class="${i <= nota ? "fas" : "far"} fa-star"></i>`;
+        }
+        return estrelas;
+      }
+
+      // Iniciar carregamento assim que a página estiver pronta
+      document.addEventListener("DOMContentLoaded", carregarRestaurantes);
+    </script>
+  </body>
+</html>
+
+<!-- Back deve mandar
+ [
+  { "nome": "Coco Bambu", "nota": 5 },
+  ...
+]
+ -->
