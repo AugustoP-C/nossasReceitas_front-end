@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relatório & Parâmetros</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body,
+      html {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background-color: #1e1e1e;
+      }
+      header {
+        background-color: #ffd700;
+        color: #b22222;
+        padding: 20px;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        background-color: white;
+        height: calc(100% - 80px);
+      }
+      .content-box {
+        background-color: #f5f0c9;
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 800px;
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .block {
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 1.5rem;
+        border-radius: 12px;
+        flex: 1 1 250px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .block h3 {
+        font-size: 1.2rem;
+        color: #333;
+        text-align: center;
+      }
+      .report-item {
+        font-size: 1rem;
+        color: #222;
+      }
+      .label {
+        font-size: 0.95rem;
+        color: #222;
+      }
+      input[type="date"],
+      input[type="email"] {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        width: 100%;
+      }
+      .btn {
+        margin-top: auto;
+        padding: 0.7rem;
+        background-color: #1877f2;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #1056a3;
+      }
+      .voltar {
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        color: black;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .voltar:hover {
+        color: #444;
+      }
+      .mensagem {
+        margin-top: 1rem;
+        font-weight: bold;
+        font-size: 1rem;
+        color: green;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Nossas Receitas</header>
+
+    <div class="container">
+      <div class="content-box">
+        <div class="block">
+          <h3>Relatório de Produção Mensal</h3>
+          <div class="report-item">
+            Total de Receitas: <strong id="total-receitas">10</strong>
+          </div>
+          <div class="report-item">
+            Degustações Realizadas: <strong id="total-degustacoes">10</strong>
+          </div>
+          <button class="btn" onclick="enviarPorEmail()">
+            Enviar por E-mail
+          </button>
+          <div id="mensagem-email" class="mensagem"></div>
+        </div>
+
+        <div class="block">
+          <h3>Parâmetro do Sistema</h3>
+          <label class="label" for="data-producao">Data Produção</label>
+          <input id="data-producao" type="date" value="2025-04-12" />
+
+          <label class="label" for="email-param">E-mail</label>
+          <input id="email-param" type="email" placeholder="seu@exemplo.com" />
+
+          <button class="btn" onclick="salvarParametros()">Salvar</button>
+          <div id="mensagem-parametros" class="mensagem"></div>
+        </div>
+      </div>
+
+      <div class="voltar" onclick="window.history.back()">Voltar</div>
+    </div>
+
+    <script>
+      async function enviarPorEmail() {
+        const mensagem = document.getElementById("mensagem-email");
+        const email = document.getElementById("email-param").value;
+
+        if (!email || !email.includes("@")) {
+          mensagem.textContent = "Informe um e-mail válido.";
+          mensagem.style.color = "red";
+          return;
+        }
+
+        mensagem.textContent = "Enviando e-mail...";
+        mensagem.style.color = "black";
+
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/enviar-email",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email }),
+            }
+          );
+
+          if (response.ok) {
+            mensagem.textContent = "Relatório enviado com sucesso!";
+            mensagem.style.color = "green";
+          } else {
+            mensagem.textContent = "Erro ao enviar e-mail.";
+            mensagem.style.color = "red";
+          }
+        } catch (error) {
+          mensagem.textContent = "Erro de conexão com o servidor.";
+          mensagem.style.color = "red";
+        }
+      }
+
+      async function salvarParametros() {
+        const data = document.getElementById("data-producao").value;
+        const email = document.getElementById("email-param").value;
+        const mensagem = document.getElementById("mensagem-parametros");
+
+        if (!data || !email.includes("@")) {
+          mensagem.textContent = "Preencha a data e um e-mail válido.";
+          mensagem.style.color = "red";
+          return;
+        }
+
+        mensagem.textContent = "Salvando parâmetros...";
+        mensagem.style.color = "black";
+
+        try {
+          const response = await fetch("http://localhost:3000/api/parametros", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              dataProducao: data,
+              email,
+            }),
+          });
+
+          if (response.ok) {
+            mensagem.textContent = "Parâmetros salvos com sucesso!";
+            mensagem.style.color = "green";
+          } else {
+            const erro = await response.json();
+            mensagem.textContent = erro.message || "Erro ao salvar parâmetros.";
+            mensagem.style.color = "red";
+          }
+        } catch (err) {
+          mensagem.textContent = "Erro de conexão com o servidor.";
+          mensagem.style.color = "red";
+        }
+      }
+    </script>
+  </body>
+</html>

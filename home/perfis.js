@@ -1,21 +1,32 @@
 // Simula um login que retorna o perfil do usuário
-function obterPerfilUsuario() {
+async function obterPerfilUsuario() {
   let cargo = "";
-  fetch("/perfil", {})
-    .then((res) => res.json())
-    .then((data) => {
-      const idCargo = data.id_cargo;
-      if (idCargo == "1") {
-        cargo = "cozinheiro";
-      } else if (idCargo == "2") {
-        cargo = "degustador";
-      } else if (idCargo == "3") {
-        cargo = "editor";
-      } else if (idCargo == "4") {
-        cargo = "admin";
-      }
-    });
 
+  email = sessionStorage.getItem("email");
+  senha = sessionStorage.getItem("senha");
+
+  try {
+    const res = await fetch("http://localhost:8000/perfil", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
+    const idCargo = await res.json();
+
+    if (idCargo == "1") {
+      cargo = "cozinheiro";
+    } else if (idCargo == "2") {
+      cargo = "degustador";
+    } else if (idCargo == "3") {
+      cargo = "editor";
+    } else if (idCargo == "4") {
+      cargo = "admin";
+    }
+  } catch (err) {
+    document.getElementById("erro-msg").textContent =
+      "Erro de conexão com o servidor.";
+    console.error(err);
+  }
   return cargo;
 }
 
@@ -38,14 +49,14 @@ function carregarHomePorPerfil(perfil) {
               <h2>Dashboard Administrador</h2>
 
               <div class="grid-buttons">
-                <button onclick="window.location.href='ConsultarFuncionario.php'">Cargo</button>
-                <button onclick="window.location.href='consultarRestaurante.php'">Restaurantes</button>
-                <button onclick="window.location.href='IncluirCategoria.php'">Categoria</button>
-                <button onclick="window.location.href='ConsultarFuncionario.php'">Funcionário</button>
-                <button onclick="window.location.href='RealatorioMensal.php'">Relatório de Produção Mensal</button>
-                <button onclick="window.location.href='consultarRestaurante.php'">Referência</button>
-                <button onclick="window.location.href='GerarEmail.php'">Gerar e-mail de produção Mensal</button>
-                <button onclick="window.location.href='Parametros.php'">Parâmetros do Sistema</button>
+                <button onclick="window.location.href='../consultarFuncionario/funcionario.html'">Cargo</button>
+                <button onclick="window.location.href='../ConsultarRestaurante/restaurantes.html'">Restaurantes</button>
+                <button onclick="window.location.href='../IncluirCategoria/categoria.html'">Categoria</button>
+                <button onclick="window.location.href='../consultarFuncionario/funcionario.html'">Funcionário</button>
+                <button onclick="window.location.href='../RealatorioMensal/relatorio.html'">Relatório de Produção Mensal</button>
+                <button onclick="window.location.href='../ConsultarRestaurante/restaurantes.html'">Referência</button>
+                <button onclick="window.location.href='../GerarEmail/email.html'">Gerar e-mail de produção Mensal</button>
+                <button onclick="window.location.href='../Parametros/parametros.html'">Parâmetros do Sistema</button>
               </div>
 
               <div class="voltar" onclick="window.history.back()">Voltar</div>
