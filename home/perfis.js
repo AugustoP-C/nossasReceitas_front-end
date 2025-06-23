@@ -11,7 +11,10 @@ async function obterPerfilUsuario() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, senha }),
     });
-    const idCargo = await res.json();
+
+    const data = await res.json();
+
+    const idCargo = data.id_cargo; 
 
     if (idCargo == "1") {
       cargo = "cozinheiro";
@@ -22,21 +25,26 @@ async function obterPerfilUsuario() {
     } else if (idCargo == "4") {
       cargo = "admin";
     }
+
+    return cargo;
   } catch (err) {
     document.getElementById("erro-msg").textContent =
       "Erro de conexão com o servidor.";
     console.error(err);
   }
-  return cargo;
 }
 
 async function carregarHomePorPerfil() {
   const conteudo = document.getElementById("conteudo");
   const body = document.body;
+  const perfil = await obterPerfilUsuario();
+  if (perfil) {
+    document.body.classList.add(perfil);
+  } else {
+    console.warn("Classe não definida, valor:", perfil);
+  }
 
-  let perfil = await obterPerfilUsuario;
   // Aplica uma classe de estilo de acordo com o perfil
-  body.classList.add(perfil);
 
   // Insere conteúdo baseado no perfil
   if (perfil === "admin") {
@@ -50,14 +58,14 @@ async function carregarHomePorPerfil() {
               <h2>Dashboard Administrador</h2>
 
               <div class="grid-buttons">
-                <button onclick="window.location.href='../consultarFuncionario/funcionario.html'">Cargo</button>
-                <button onclick="window.location.href='../ConsultarRestaurante/restaurantes.html'">Restaurantes</button>
-                <button onclick="window.location.href='../IncluirCategoria/categoria.html'">Categoria</button>
-                <button onclick="window.location.href='../consultarFuncionario/funcionario.html'">Funcionário</button>
-                <button onclick="window.location.href='../RealatorioMensal/relatorio.html'">Relatório de Produção Mensal</button>
-                <button onclick="window.location.href='../ConsultarRestaurante/restaurantes.html'">Referência</button>
-                <button onclick="window.location.href='../GerarEmail/email.html'">Gerar e-mail de produção Mensal</button>
-                <button onclick="window.location.href='../Parametros/parametros.html'">Parâmetros do Sistema</button>
+                <button onclick="window.location.href='../perfilAdm/consultarFuncionario/funcionario.html'">Cargo</button>
+                <button onclick="window.location.href='../perfilAdm/ConsultarRestaurante/restaurantes.html'">Restaurantes</button>
+                <button onclick="window.location.href='../perfilAdm/IncluirCategoria/categoria.html'">Categoria</button>
+                <button onclick="window.location.href='../perfilAdm/consultarFuncionario/funcionario.html'">Funcionário</button>
+                <button onclick="window.location.href='../perfilAdm/RealatorioMensal/relatorio.html'">Relatório de Produção Mensal</button>
+                <button onclick="window.location.href='../perfilAdm/ConsultarRestaurante/restaurantes.html'">Referência</button>
+                <button onclick="window.location.href='../perfilAdm/GerarEmail/email.html'">Gerar e-mail de produção Mensal</button>
+                <button onclick="window.location.href='../perfilAdm/Parametros/parametros.html'">Parâmetros do Sistema</button>
               </div>
 
               <div class="voltar" onclick="window.history.back()">Voltar</div>
@@ -74,16 +82,16 @@ async function carregarHomePorPerfil() {
             <div class="dashboard-box">
               <h2>Dashboard Cozinheiro</h2>
               <div class="dashboard-buttons">
-                <button onclick="location.href='../addReceitas/addReceitas.html'">
+                <button onclick="location.href='../perfilCozinheiro/addReceitas/addReceitas.html'">
                   <span class="icon">📋</span> Adicionar receita
                 </button>
-                <button onclick="location.href='../verReceitas/verReceitas.html'">
+                <button onclick="location.href='../perfilCozinheiro/verReceitas/verReceitas.html'">
                   <span class="icon">📋</span> Ver receita
                 </button>
-                <button onclick="location.href='../medidas/medidas.html'">
+                <button onclick="location.href='../perfilCozinheiro/medidas/medidas.html'">
                   <span class="icon">📏</span> Medida
                 </button>
-                <button onclick="location.href='../ingredientes/ingredientes.html'">
+                <button onclick="location.href='../perfilCozinheiro/ingredientes/ingredientes.html'">
                   <span class="icon">🧂</span> Ingredientes
                 </button>
               </div>
@@ -103,5 +111,5 @@ async function carregarHomePorPerfil() {
 // Executa ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
   const perfil = obterPerfilUsuario();
-  carregarHomePorPerfil(perfil);
+  carregarHomePorPerfil();
 });

@@ -54,7 +54,7 @@ document
 
       const data = await res.json();
       if (res.ok) {
-        alert("Login realizado com sucesso!");
+        //alert("Login realizado com sucesso!");
         window.location.href = "../home/home.html";
       } else {
         document.getElementById("erro-msg").textContent =
