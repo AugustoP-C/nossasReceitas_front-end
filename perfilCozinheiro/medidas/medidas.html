@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Medidas</title>
+  <link rel="stylesheet" href="estilo_dashboard.css">
+</head>
+<body>
+  <header>Nossas Receitas</header>
+  <div class="container">
+    <div class="dashboard-box">
+      <h2>Unidades de Medida</h2>
+      <form action="salvar_medida.php" method="POST">
+        <input type="text" name="nome" placeholder="Ex: grama, litro, colher" required>
+        <button type="submit">Adicionar</button>
+      </form>
+      <ul>
+        <li>Grama (g)</li>
+        <li>Litro (L)</li>
+        <li>Colher (col.)</li>
+      </ul>
+      <div class="voltar" onclick="window.history.back()">Voltar</div>
+    </div>
+  </div>
+</body>
+</html>
