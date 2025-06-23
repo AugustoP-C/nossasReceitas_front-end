@@ -80,6 +80,22 @@ header {
   font-size: 1.2rem;
 }
 
+#form-receita input,
+#form-receita textarea {
+  width: 100%; /* ocupa toda a largura do form */
+  max-width: 100%; /* evita que ultrapasse o form */
+  padding: 10px; /* espaçamento interno */
+  font-size: 1rem; /* tamanho do texto legível */
+  border: 1px solid #ccc; /* borda padrão */
+  border-radius: 5px; /* cantos arredondados */
+  resize: none; /* impede redimensionamento manual */
+  box-sizing: border-box; /* inclui padding na largura */
+}
+
+#form-receita textarea {
+  height: 350px;
+}
+
 /* Link de voltar */
 .voltar {
   margin-top: 1.5rem;
