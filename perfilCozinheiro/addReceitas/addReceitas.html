@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Adicionar Receita</title>
-  <link rel="stylesheet" href="perfilCozinheiro\estilo_dashboard.css">
-</head>
-<body>
-  <header>Nossas Receitas</header>
-  <div class="container">
-    <div class="dashboard-box">
-      <h2>Adicionar Receita</h2>
-      <form action="salvar_receita.php" method="POST">
-        <input type="text" name="nome" placeholder="Nome da Receita" required><br><br>
-        <textarea name="modo_preparo" placeholder="Modo de Preparo" rows="5" required></textarea><br><br>
-        <button type="submit">Salvar Receita</button>
-      </form>
-      <div class="voltar" onclick="window.history.back()">Voltar</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Adicionar Receita</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>Nossas Receitas</header>
+    <div class="container">
+      <div class="dashboard-box">
+        <h2>Adicionar Receita</h2>
+        <form action="salvar_receita.php" method="POST">
+          <input
+            type="text"
+            name="nome"
+            placeholder="Nome da Receita"
+            required
+          /><br /><br />
+          <textarea
+            name="modo_preparo"
+            placeholder="Modo de Preparo"
+            rows="5"
+            required
+          ></textarea
+          ><br /><br />
+          <button type="submit">Salvar Receita</button>
+        </form>
+        <div class="voltar" onclick="window.history.back()">Voltar</div>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
