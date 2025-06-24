@@ -69,8 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const ingredientesComQuantidade = ingredientesSelecionados.map((id) => {
         const quantidade = formData.get(`quantidade_${id}`);
         return {
-          id: parseInt(id), // garante que seja número
-          quantidade: quantidade || "", // evita undefined
+          id_ingrediente: parseInt(id), // aqui envia como 'id_ingrediente'
+          quantidade: quantidade || "",
         };
       });
 
