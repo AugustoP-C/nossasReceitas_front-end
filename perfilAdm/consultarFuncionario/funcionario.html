@@ -4,99 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Consulta de Funcionário</title>
+
+    <!-- Ícones do Material Design -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <style>
-      body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-      }
 
-      header {
-        background-color: #ffd700;
-        color: #b22222;
-        text-align: center;
-        padding: 20px;
-        font-weight: bold;
-        font-size: 1.8rem;
-      }
-
-      .container {
-        background-color: white;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .box {
-        background-color: #f5f0c9;
-        border-radius: 20px;
-        padding: 2rem;
-        width: 100%;
-        max-width: 800px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      h2 {
-        margin-bottom: 1.5rem;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white;
-        margin-bottom: 1rem;
-      }
-
-      th,
-      td {
-        padding: 0.7rem;
-        border: 1px solid #ccc;
-        text-align: center;
-        font-size: 0.95rem;
-      }
-
-      th {
-        background-color: #e9e9e9;
-      }
-
-      .btn-add {
-        padding: 0.6rem 1.2rem;
-        background-color: #1877f2;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        cursor: pointer;
-      }
-
-      .btn-add:hover {
-        background-color: #0f5ec0;
-      }
-
-      .icon {
-        cursor: pointer;
-        margin: 0 5px;
-        font-size: 1.1rem;
-      }
-
-      .voltar {
-        margin-top: 2rem;
-        font-size: 1rem;
-        cursor: pointer;
-        color: black;
-        text-decoration: underline;
-      }
-
-      .voltar:hover {
-        color: #444;
-      }
-    </style>
+    <!-- Estilo externo -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header>Nossas Receitas</header>
@@ -121,72 +37,49 @@
           </tbody>
         </table>
 
-        <button
-          class="btn-add"
-          onclick="window.location.href='IncluirFuncionario.php'"
-        >
+        <button class="btn-add" onclick="abrirModal('modalNovoFuncionario')">
           Adicionar funcionário
         </button>
+        <!-- Modal de Novo Funcionário -->
+        <div class="modal" id="modalNovoFuncionario">
+          <div class="modal-content">
+            <span
+              class="close-btn"
+              onclick="fecharModal('modalNovoFuncionario')"
+              >&times;</span
+            >
+            <h3>Adicionar Novo Funcionário</h3>
+            <form id="formNovoFuncionario">
+              <label
+                >Nome:
+                <input type="text" id="novo-nome" required /> </label
+              ><br /><br />
+              <label
+                >Data Ingresso:
+                <input type="date" id="novo-data" required /> </label
+              ><br /><br />
+              <label
+                >Salário:
+                <input type="number" id="novo-salario" required /> </label
+              ><br /><br />
+              <label
+                >Cargo:
+                <input type="text" id="novo-cargo" required /> </label
+              ><br /><br />
+              <label
+                >Nome Fantasia:
+                <input type="text" id="novo-fantasia" required /> </label
+              ><br /><br />
+              <button type="submit">Salvar</button>
+            </form>
+          </div>
+        </div>
 
         <div class="voltar" onclick="window.history.back()">Voltar</div>
       </div>
     </div>
 
-    <script>
-      // Exemplo de dados recebidos (simulando um fetch de API)
-      const funcionarios = [
-        {
-          id_funcionario: 1,
-          nome: "João Silva",
-          data_ingresso: "2023-01-10",
-          salario: 4500.75,
-          cargo_nome: "Analista",
-          nome_fantasia: "Empresa XYZ",
-        },
-        {
-          id_funcionario: 2,
-          nome: "Maria Souza",
-          data_ingresso: "2022-08-15",
-          salario: 5200.0,
-          cargo_nome: "Gerente",
-          nome_fantasia: "Empresa ABC",
-        },
-        // ... outros funcionários
-      ];
-
-      const tbody = document.getElementById("corpo-tabela");
-
-      funcionarios.forEach((f) => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-          <td>${f.nome}</td>
-          <td>${f.data_ingresso}</td>
-          <td>R$ ${f.salario.toFixed(2).replace(".", ",")}</td>
-          <td>${f.cargo_nome}</td>
-          <td>${f.nome_fantasia}</td>
-          <td>
-            <span class="material-icons icon"
-                  style="color: #1976d2;"
-                  title="Editar"
-                  onclick="window.location.href='EditarFuncionario.html?id=${
-                    f.id_funcionario
-                  }'">
-              edit
-            </span>
-            <span class="material-icons icon"
-                  style="color: #d32f2f;"
-                  title="Excluir"
-                  onclick="if(confirm('Quer mesmo excluir esse funcionário?')) window.location.href='ExcluirFuncionario.html?id=${
-                    f.id_funcionario
-                  }'">
-              delete
-            </span>
-          </td>
-        `;
-
-        tbody.appendChild(tr);
-      });
-    </script>
+    <!-- Correção na chamada do script -->
+    <script src="script.js"></script>
   </body>
 </html>

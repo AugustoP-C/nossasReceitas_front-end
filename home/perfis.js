@@ -38,7 +38,8 @@ async function obterPerfilUsuario() {
 async function carregarHomePorPerfil() {
   const conteudo = document.getElementById("conteudo");
   const body = document.body;
-  const perfil = await obterPerfilUsuario();
+  // const perfil = await obterPerfilUsuario();
+  const perfil = "admin";
   if (perfil) {
     document.body.classList.add(perfil);
   } else {
