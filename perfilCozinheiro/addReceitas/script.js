@@ -1,60 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
-  carregarIngredientes();
-
-  document
-    .getElementById("form-receita")
-    .addEventListener("submit", async function (event) {
-      event.preventDefault(); // Impede recarregar a página
-
-      const form = event.target;
-      const formData = new FormData(form);
-
-      // Criando objeto JSON com nome e modo de preparo
-      const jsonData = {
-        nome: formData.get("nome"),
-        modo_preparo: formData.get("modo_preparo"),
-        categoria: document.getElementById("categoria").value,
-      };
-
-      // Pega ingredientes selecionados
-      const ingredientesSelecionados = formData.getAll("ingredientes[]");
-
-      const quantidades = {};
-      ingredientesSelecionados.forEach((id) => {
-        const quantidade = formData.get(`quantidade_${id}`);
-        quantidades[id] = quantidade;
-      });
-
-      jsonData.ingredientes = ingredientesSelecionados;
-      jsonData.quantidades = quantidades;
-
-      try {
-        const resposta = await fetch(
-          "http://localhost:8000/receitas/adicionar",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(jsonData),
-          }
-        );
-
-        if (!resposta.ok) throw new Error("Erro ao salvar receita");
-
-        const resultado = await resposta.json();
-        console.log("Receita salva com sucesso:", resultado);
-        alert("Receita salva com sucesso!");
-      } catch (error) {
-        console.error("Erro ao enviar:", error);
-        alert("Erro ao salvar receita!");
-      }
-    });
-});
-
 async function carregarIngredientes() {
   const container = document.getElementById("ingredientes-container");
-  const resposta = await fetch("http://localhost:3000/receitas");
+  const resposta = await fetch("http://localhost:8000/ingredientes/consultar");
   const ingredientes = await resposta.json();
 
   // exemplo:
@@ -97,3 +43,60 @@ async function carregarIngredientes() {
     container.appendChild(div);
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregarIngredientes();
+
+  document
+    .getElementById("form-receita")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const formData = new FormData(form);
+
+      const jsonData = {
+        nome: formData.get("nome"),
+        modo_preparo: formData.get("modo_preparo"),
+        id_conzinheiro: sessionStorage.getItem("id_cozinheiro"),
+        categoria: document.getElementById("categoria").value,
+      };
+
+      // Pega todos os ingredientes marcados
+      const ingredientesSelecionados = formData.getAll("ingredientes[]");
+
+      // Cria array com { id, quantidade }
+      const ingredientesComQuantidade = ingredientesSelecionados.map((id) => {
+        const quantidade = formData.get(`quantidade_${id}`);
+        return {
+          id: parseInt(id), // garante que seja número
+          quantidade: quantidade || "", // evita undefined
+        };
+      });
+
+      // Adiciona ao JSON
+      jsonData.ingredientes = ingredientesComQuantidade;
+
+      try {
+        const resposta = await fetch(
+          "http://localhost:8000/receitas/adicionar",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonData),
+          }
+        );
+
+        if (!resposta.ok) throw new Error("Erro ao salvar receita");
+
+        const resultado = await resposta.json();
+        console.log("Receita salva com sucesso:", resultado);
+        alert("Receita salva com sucesso!");
+      } catch (error) {
+        console.error("Erro ao enviar:", error);
+        alert("Erro ao salvar receita.");
+      }
+    });
+});

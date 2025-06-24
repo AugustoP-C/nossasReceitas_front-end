@@ -14,10 +14,11 @@ async function obterPerfilUsuario() {
 
     const data = await res.json();
 
-    const idCargo = data.id_cargo; 
+    const idCargo = data.id_cargo;
 
     if (idCargo == "1") {
       cargo = "cozinheiro";
+      sessionStorage.setItem("id_cozinheiro", idCargo);
     } else if (idCargo == "2") {
       cargo = "degustador";
     } else if (idCargo == "3") {
