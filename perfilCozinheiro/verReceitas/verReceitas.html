@@ -11,14 +11,26 @@
     <div class="container">
       <div class="dashboard-box">
         <h2>Receitas Cadastradas</h2>
-        <ul>
-          <!-- Substitua pelo PHP de listagem real -->
-          <li>Arroz à grega</li>
-          <li>Feijoada</li>
-          <li>Bolo de cenoura</li>
+        <ul id="lista-receitas">
+          <!-- Preenchido dinamicamente -->
         </ul>
         <div class="voltar" onclick="window.history.back()">Voltar</div>
       </div>
     </div>
+
+    <!-- Dialog de detalhes -->
+    <dialog id="detalhesDialog">
+      <h3 id="dialogTitulo"></h3>
+      <p>
+        <strong>Ingredientes:</strong> <span id="dialogIngredientes"></span>
+      </p>
+      <p><strong>Modo de Preparo:</strong> <span id="dialogModo"></span></p>
+      <button onclick="document.getElementById('detalhesDialog').close()">
+        Fechar
+      </button>
+    </dialog>
+
+    <!-- Importando script externo -->
+    <script src="script.js" defer></script>
   </body>
 </html>

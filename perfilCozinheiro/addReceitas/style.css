@@ -28,7 +28,11 @@ header {
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: white;
+  /* background-color: white; */
+  height: calc(100% - 80px);
+  background-size: cover;
+  background-position: center;
+  background-image: url("https://s2-oglobo.glbimg.com/uT8D9MkVY7Umy0d10lRBvXo-Obk=/0x0:861x574/888x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_da025474c0c44edd99332dddb09cabe8/internal_photos/bs/2022/R/x/a1jRCXSQGnNnBjqYA0jg/100969568-ri-rio-de-janeiro-rj-26-10-2022-marcas-cariocas-restaurantes-outback.-foto-de-rebe.jpg");
   height: calc(100% - 80px);
 }
 
