@@ -11,6 +11,7 @@
     <div class="container">
       <div class="dashboard-box">
         <h2>Adicionar Receita</h2>
+
         <label for="categoria">Categoria:</label>
         <select id="categoria" name="categoria">
           <option value="1">Prato Principal</option>
@@ -18,6 +19,8 @@
           <option value="3">Sobremesa</option>
         </select>
         <br /><br />
+
+        <!-- Formulário principal -->
         <form id="form-receita">
           <input
             type="text"
@@ -25,22 +28,41 @@
             placeholder="Nome da Receita"
             required
           /><br /><br />
+
           <textarea
             name="modo_preparo"
             placeholder="Modo de Preparo"
             rows="5"
             required
-          ></textarea
-          ><br /><br />
+          ></textarea>
+          <br /><br />
+
           <fieldset>
             <legend>Ingredientes</legend>
-            <div id="ingredientes-container">
-              <!-- Checkboxes + campos de quantidade serão adicionados aqui via JS -->
+
+            <div class="ingrediente-form">
+              <select id="ingrediente-select">
+                <!-- Populado via JS -->
+              </select>
+              <input
+                type="text"
+                id="ingrediente-quantidade"
+                placeholder="Quantidade (ex: 200g)"
+              />
+              <button type="button" id="adicionar-ingrediente">
+                Adicionar Ingrediente
+              </button>
+            </div>
+
+            <div id="ingredientes-adicionados">
+              <!-- Ingredientes inseridos aparecerão aqui -->
             </div>
           </fieldset>
+
           <br />
           <button type="submit">Salvar Receita</button>
         </form>
+
         <script src="script.js"></script>
         <div class="voltar" onclick="window.history.back()">Voltar</div>
       </div>

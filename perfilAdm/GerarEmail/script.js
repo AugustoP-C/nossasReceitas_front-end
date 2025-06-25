@@ -4,7 +4,7 @@ async function carregarTabela() {
     '<tr><td colspan="5" class="text-center p-2 text-gray-500">Carregando...</td></tr>';
 
   try {
-    const resposta = await fetch("http://localhost:3000/api/cozinheiros"); // Altere essa URL para a real
+    const resposta = await fetch("http://localhost:8000/api/cozinheiros"); // Altere essa URL para a real
     if (!resposta.ok) throw new Error("Erro na requisição");
 
     const dados = await resposta.json();
