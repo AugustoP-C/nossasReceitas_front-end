@@ -37,7 +37,10 @@
           </tbody>
         </table>
 
-        <button class="btn-add" onclick="abrirModal('modalNovoFuncionario')">
+        <button
+          class="btn-add"
+          onclick="window.location.href='../criarFuncionario/funcionario.html?id=${f.id_funcionario}'"
+        >
           Adicionar funcionário
         </button>
         <!-- Modal de Novo Funcionário -->
@@ -50,9 +53,7 @@
             >
             <h3>Adicionar Novo Funcionário</h3>
             <form id="formNovoFuncionario">
-              <label
-                >Nome:
-                <input type="text" id="novo-nome" required /> </label
+              <label>Nome: <input type="text" id="novo-nome" required /> </label
               ><br /><br />
               <label
                 >Data Ingresso:
@@ -63,8 +64,7 @@
                 <input type="number" id="novo-salario" required /> </label
               ><br /><br />
               <label
-                >Cargo:
-                <input type="text" id="novo-cargo" required /> </label
+                >Cargo: <input type="text" id="novo-cargo" required /> </label
               ><br /><br />
               <label
                 >Nome Fantasia:

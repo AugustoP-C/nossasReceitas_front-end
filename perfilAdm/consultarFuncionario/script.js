@@ -22,9 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="material-icons icon"
                   style="color: #1976d2;"
                   title="Editar"
-                  onclick="window.location.href='../editarFuncionario/editar.html?id=${
-                    f.id_funcionario
-                  }'">
+                  onclick="abrirModal('modalNovoFuncionario')">
               edit
             </span>
             <span class="material-icons icon"
@@ -68,8 +66,8 @@ document
       cargo_nome: document.getElementById("novo-cargo").value,
       nome_fantasia: document.getElementById("novo-fantasia").value,
     };
-    fetch("http://localhost:8000/funcionarios", {
-      method: "POST",
+    fetch("http://localhost:8000/api/funcionarios/atualizar", {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -83,10 +81,10 @@ document
       })
       .catch((error) => {
         console.error("Erro:", error);
-        alert("Erro ao cadastrar funcionário.");
+        alert("Erro ao atualizar funcionário.");
       });
 
-    console.log("Novo funcionário:", novoFuncionario);
+    console.log("Funcionárioatualizado:", novoFuncionario);
     fecharModal("modalNovoFuncionario");
     alert("Funcionário cadastrado com sucesso!");
 

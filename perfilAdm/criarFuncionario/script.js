@@ -22,20 +22,17 @@ document
     msgEl.style.color = "black";
 
     try {
-      const res = await fetch(
-        "http://localhost:8000/api/funcionarios/atualizar",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dados),
-        }
-      );
+      const res = await fetch("http://localhost:8000/funcionarios", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados),
+      });
 
       if (res.ok) {
-        msgEl.textContent = "Funcionário atualizado com sucesso!";
+        msgEl.textContent = "Funcionário criado com sucesso!";
         msgEl.style.color = "green";
       } else {
-        msgEl.textContent = "Erro ao atualizar funcionário.";
+        msgEl.textContent = "Erro ao criar funcionário.";
         msgEl.style.color = "red";
       }
     } catch (err) {
