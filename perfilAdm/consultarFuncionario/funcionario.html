@@ -74,6 +74,23 @@
             </form>
           </div>
         </div>
+        <dialog id="dialogExcluir">
+          <form method="dialog" class="dialog-content">
+            <h3>Confirmar exclusão</h3>
+            <p>Tem certeza que deseja excluir este funcionário?</p>
+            <input type="hidden" id="id-excluir-funcionario" />
+            <menu>
+              <button value="cancelar">Cancelar</button>
+              <button
+                id="btnConfirmarExclusao"
+                value="confirmar"
+                class="btn-danger"
+              >
+                Excluir
+              </button>
+            </menu>
+          </form>
+        </dialog>
 
         <div class="voltar" onclick="window.history.back()">Voltar</div>
       </div>
