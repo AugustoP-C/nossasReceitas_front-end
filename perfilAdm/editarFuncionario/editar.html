@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Funcionário</title>
+
+    <!-- Ícones -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <!-- Estilo externo -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>Nossas Receitas</header>
+
+    <div class="container">
+      <form class="form-box" id="form-funcionario" autocomplete="off">
+        <input
+          type="hidden"
+          id="id_funcionario"
+          name="id_funcionario"
+          value="1"
+        />
+
+        <div class="row">
+          <div class="half">
+            <label for="nome">Funcionário</label>
+            <input type="text" id="nome" name="nome" required />
+          </div>
+          <div class="half">
+            <label for="data">Data ingresso</label>
+            <input type="date" id="data" name="data_ingresso" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="half">
+            <label for="rg">RG</label>
+            <input type="text" id="rg" name="rg" required />
+          </div>
+          <div class="half">
+            <label for="id_cargo">Cargo</label>
+            <select id="id_cargo" name="id_cargo" required>
+              <option value="">Selecione o cargo</option>
+              <option value="1">Administrador</option>
+              <option value="2">Cozinheiro</option>
+              <option value="3">Degustador</option>
+              <option value="4">Editor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="half">
+            <label for="salario">Salário</label>
+            <input type="text" id="salario" name="salario" required />
+          </div>
+          <div class="half">
+            <label for="nome_fantasia">Nome fantasia</label>
+            <input
+              type="text"
+              id="nome_fantasia"
+              name="nome_fantasia"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <button type="submit" class="btn-salvar">
+          <span class="material-icons">save</span> Atualizar
+        </button>
+
+        <div class="msg" id="mensagem"></div>
+      </form>
+
+      <div class="voltar" onclick="window.history.back()">Voltar</div>
+    </div>
+
+    <!-- Correto agora -->
+    <script src="script.js"></script>
+  </body>
+</html>
