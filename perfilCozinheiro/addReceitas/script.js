@@ -1,51 +1,57 @@
+let listaIngredientes = [];
+
 async function carregarIngredientes() {
-  const container = document.getElementById("ingredientes-container");
+  const select = document.getElementById("ingrediente-select");
   const resposta = await fetch("http://localhost:8000/ingredientes/consultar");
   const ingredientes = await resposta.json();
 
-  // exemplo:
-  // const ingredientes = [
-  //   { id: 1, nome: "Arroz" },
-  //   { id: 2, nome: "Feijão" },
-  //   { id: 3, nome: "Frango" },
-  // ];
-
   ingredientes.forEach((ingrediente) => {
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.name = "ingredientes[]";
-    checkbox.value = ingrediente.id;
-    checkbox.id = `ingrediente-${ingrediente.id}`;
-
-    const label = document.createElement("label");
-    label.htmlFor = checkbox.id;
-    label.textContent = ingrediente.nome;
-
-    const quantidadeInput = document.createElement("input");
-    quantidadeInput.type = "text";
-    quantidadeInput.name = `quantidade_${ingrediente.id}`;
-    quantidadeInput.placeholder =
-      "Quantidade (ex: 200g, 100ml, 1L, 1Xicara, 2Colher)";
-    quantidadeInput.style.display = "none";
-    quantidadeInput.style.marginLeft = "10px";
-
-    checkbox.addEventListener("change", () => {
-      quantidadeInput.style.display = checkbox.checked
-        ? "inline-block"
-        : "none";
-    });
-
-    const div = document.createElement("div");
-    div.appendChild(checkbox);
-    div.appendChild(label);
-    div.appendChild(quantidadeInput);
-
-    container.appendChild(div);
+    const option = document.createElement("option");
+    option.value = ingrediente.id_ingrediente;
+    option.textContent = ingrediente.nome;
+    select.appendChild(option);
   });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   carregarIngredientes();
+
+  document
+    .getElementById("adicionar-ingrediente")
+    .addEventListener("click", () => {
+      const select = document.getElementById("ingrediente-select");
+      const id = select.value;
+      const nome = select.options[select.selectedIndex].text;
+      const quantidade = document
+        .getElementById("ingrediente-quantidade")
+        .value.trim();
+
+      if (!id || !quantidade) {
+        alert("Selecione um ingrediente e informe a quantidade.");
+        return;
+      }
+
+      // Evita duplicata
+      const jaExiste = listaIngredientes.some(
+        (item) => item.id_ingrediente === parseInt(id)
+      );
+      if (jaExiste) {
+        alert("Ingrediente já adicionado.");
+        return;
+      }
+
+      listaIngredientes.push({
+        id_ingrediente: parseInt(id),
+        quantidade,
+      });
+
+      const container = document.getElementById("ingredientes-adicionados");
+      const div = document.createElement("div");
+      div.textContent = `${nome} - ${quantidade}`;
+      container.appendChild(div);
+
+      document.getElementById("ingrediente-quantidade").value = "";
+    });
 
   document
     .getElementById("form-receita")
@@ -59,23 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
         nome: formData.get("nome"),
         modo_preparo: formData.get("modo_preparo"),
         id_conzinheiro: sessionStorage.getItem("id_cozinheiro"),
-        categoria: document.getElementById("categoria").value,
+        categoria: formData.get("categoria"),
+        ingredientes: listaIngredientes,
       };
 
-      // Pega todos os ingredientes marcados
-      const ingredientesSelecionados = formData.getAll("ingredientes[]");
-
-      // Cria array com { id, quantidade }
-      const ingredientesComQuantidade = ingredientesSelecionados.map((id) => {
-        const quantidade = formData.get(`quantidade_${id}`);
-        return {
-          id_ingrediente: parseInt(id), // aqui envia como 'id_ingrediente'
-          quantidade: quantidade || "",
-        };
-      });
-
-      // Adiciona ao JSON
-      jsonData.ingredientes = ingredientesComQuantidade;
+      console.log("Enviando JSON:", jsonData);
 
       try {
         const resposta = await fetch(
