@@ -1,7 +1,27 @@
+function excluirFuncionario(id) {
+  if (!confirm("Quer mesmo excluir esse funcionário?")) return;
+
+  fetch(`http://localhost:8000/funcionarios/excluir?id=${id}`, {
+    method: "POST",
+    // NENHUM body nem headers necessários se o backend espera apenas query string
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro ao excluir funcionário.");
+      }
+      alert("Funcionário excluído com sucesso!");
+      location.reload(); // recarrega a página para atualizar a tabela
+    })
+    .catch((error) => {
+      console.error("Erro ao excluir:", error);
+      alert("Erro ao excluir funcionário.");
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const tbody = document.getElementById("corpo-tabela");
 
-  fetch("http://localhost:8000/funcionarios") // <-- URL da sua API
+  fetch("http://localhost:8000/funcionarios/get") // <-- URL da sua API
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao buscar dados do servidor.");
@@ -16,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td>${f.nome}</td>
           <td>${f.data_ingresso}</td>
           <td>R$ ${parseFloat(f.salario).toFixed(2).replace(".", ",")}</td>
-          <td>${f.cargo_nome}</td>
+          <td>${f.id_cargo}</td>
           <td>${f.nome_fantasia}</td>
           <td>
             <span class="material-icons icon"
@@ -30,9 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="material-icons icon"
                   style="color: #d32f2f;"
                   title="Excluir"
-                  onclick="if(confirm('Quer mesmo excluir esse funcionário?')) window.location.href='ExcluirFuncionario.html?id=${
-                    f.id_funcionario
-                  }'">
+                  onclick="excluirFuncionario(${f.id_funcionario})">
               delete
             </span>
           </td>
@@ -89,6 +107,4 @@ document
     console.log("Novo funcionário:", novoFuncionario);
     fecharModal("modalNovoFuncionario");
     alert("Funcionário cadastrado com sucesso!");
-
-    // Aqui você pode fazer um fetch POST para enviar ao backend.
   });
