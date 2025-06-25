@@ -1,13 +1,13 @@
 function excluirFuncionario(id) {
   if (!confirm("Quer mesmo excluir esse funcionário?")) return;
 
- fetch("http://localhost:8000/funcionarios/excluir", {
+  fetch("http://localhost:8000/api/funcionarios/excluir", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({ id_funcionario: id }),
-  })
+  body: JSON.stringify({ id_funcionario: id }), // funciona agora
+})
     .then((response) => {
       if (!response.ok) {
         throw new Error("Erro ao excluir funcionário.");
@@ -20,7 +20,6 @@ function excluirFuncionario(id) {
       alert("Erro ao excluir funcionário.");
     });
 }
-
 document.addEventListener("DOMContentLoaded", () => {
   const tbody = document.getElementById("corpo-tabela");
 

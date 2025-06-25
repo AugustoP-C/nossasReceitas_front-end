@@ -1,41 +1,39 @@
-document
-  .getElementById("form-funcionario")
-  .addEventListener("submit", async function (e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  document
+    .getElementById("form-funcionario")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
 
-    const dados = {
-      id_funcionario: document.getElementById("id_funcionario").value,
-      nome: document.getElementById("nome").value,
-      data: document.getElementById("data").value,
-      rg: document.getElementById("rg").value,
-      id_cargo: document.getElementById("id_cargo").value,
-      salario: document
-        .getElementById("salario")
-        .value.replace(/[^0-9.,-]/g, "")
-        .replace(",", "."),
-      nome_fantasia: document.getElementById("nome_fantasia").value,
-    };
+      const novoFuncionario = {
+        nome: document.getElementById("nome").value,
+        data_ingresso: document.getElementById("data").value,
+        salario: parseFloat(document.getElementById("salario").value),
+        id_cargo: parseInt(document.getElementById("id_cargo").value),
+        nome_fantasia: document.getElementById("nome_fantasia").value,
+      };
 
-    const msgEl = document.getElementById("mensagem");
-    msgEl.textContent = "Salvando...";
-    msgEl.style.color = "black";
+      fetch("http://localhost:8000/funcionarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(novoFuncionario),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao cadastrar funcionário");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          alert(data.message || "Funcionário cadastrado com sucesso!");
 
-    try {
-      const res = await fetch("http://localhost:8000/funcionarios", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dados),
-      });
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+          alert("Erro ao cadastrar funcionário.");
+        });
 
-      if (res.ok) {
-        msgEl.textContent = "Funcionário criado com sucesso!";
-        msgEl.style.color = "green";
-      } else {
-        msgEl.textContent = "Erro ao criar funcionário.";
-        msgEl.style.color = "red";
-      }
-    } catch (err) {
-      msgEl.textContent = "Erro de conexão com o servidor.";
-      msgEl.style.color = "red";
-    }
-  });
+      console.log("Novo funcionário:", novoFuncionario);
+    });
+});
