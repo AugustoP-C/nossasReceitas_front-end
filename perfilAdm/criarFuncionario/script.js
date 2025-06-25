@@ -14,7 +14,6 @@ document
         .value.replace(/[^0-9.,-]/g, "")
         .replace(",", "."),
       nome_fantasia: document.getElementById("nome_fantasia").value,
-      email: document.getElementById("email").value,
     };
 
     const msgEl = document.getElementById("mensagem");
